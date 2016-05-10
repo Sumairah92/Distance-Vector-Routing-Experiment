@@ -1,0 +1,16 @@
+Please Run the following commands to start on each node;
+make clean
+make 
+./dvr conf<nameofnode>.txt
+
+where conf<nameofnode>.txt is present for each node in the folder.
+
+Please use Ctrl+c to stop the program
+
+The program reads information of the neighbors from conf.txt to establish it's neighbor table. Using the neighbor table, the initial routing table is populated, with '-1' as distance and '-' as next hop for the nodes not present in neighbor table. The distance vectors are loaded after the routing table is populated. 
+Two socket descriptors are used to receive dvrs from the neighbors and send dvrs to the neighbors. If a dvr is received, the update routing table function is called, which updates the routing table and loads and sends the new dvrs if required. The alarm mechanism sends periodic dvr updates if something is not being received.
+
+Limitations:
+->For some comparison and printing out purposes, an array of all 7 node names or a count of 6 was used. So for adding any more nodes, we will need to change that in the code.
+->In cases where nodes are running and one or two of them keep receiving the periodic updates of others, they go to the update routing table and if no changes are made, then dvr is not sent (as asked in assignment that dont send dvr if no updates made). But that causes that node to never have the chance to send periodic dvr since it always goes to the "else" part of receiving. That is rectified with a "tries" counter that will send a periodic update if continous 6 dvrs have been received and no update has been made.
+
